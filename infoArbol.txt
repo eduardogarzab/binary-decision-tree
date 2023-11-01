@@ -1,0 +1,20 @@
+Preorden
+Color rojo
+Tamanio grande
+Fruta Manzana
+Nulo
+Nulo
+Fruta Cereza
+Nulo
+Nulo
+Color amarillo
+Tamanio Grande
+Fruta Pera
+Nulo
+Nulo
+Fruta Limon
+Nulo
+Nulo
+Sin respuesta
+Nulo
+Nulo
