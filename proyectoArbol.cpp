@@ -59,46 +59,69 @@ Nulo
 Nulo
 */
 
-Fila<string> obtenerFilaInfo(){
+Fila<string> obtenerFilaInfo(const string &nombreArchivo) {
     Fila<string> fila;
-    ifstream archivo;
-    string nombreArchivo = "infoArbol.txt";
+    ifstream archivo(nombreArchivo);
     string linea;
 
-    cout << "Ingrese el nombre del archivo de donde se obtendra la informacion del arbol: ";
-
-    archivo.open(nombreArchivo, ios::in);
-    if(archivo.is_open()){ // Si se pudo abrir el archivo
-        while (!archivo.eof()) { // Mientras no sea el final del archivo
-            getline(archivo, linea); // Lee una linea
-            fila.mete(linea); // Inserta la linea en la fila
+    if (archivo.is_open()) { // Si se pudo abrir el archivo
+        while (getline(archivo, linea)) { // Lee una línea
+            fila.mete(linea); // Inserta la línea en la fila
         }
         archivo.close();
-    }else { // Si no se pudo abrir el archivo
-        cout << "No se pudo abrir el archivo." << nombreArchivo << endl;
+    } else { // Si no se pudo abrir el archivo
+        cout << "No se pudo abrir el archivo: " << nombreArchivo << endl;
     }
     return fila;
 }
 
-Arbol<string> *obtenerArbol(Fila<string> filaInfo){
-    Arbol<string> *arbol = new Arbol<string>();
-    string tipoRecorrido = filaInfo.siguiente(); filaInfo.saca(); // Obtiene el tipo de recorrido y lo saca
-    string linea;
+Nodo<string> *obtenerArbol(Fila<string> filaInfo) {
+    string tipoRecorrido = filaInfo.siguiente();
+    filaInfo.saca(); // Obtiene el tipo de recorrido y lo saca
+    Nodo<string> *raiz = nullptr; // Inicializa la raíz como nullptr
+    Arbol<string> arbol; // Creamos un objeto Arbol
 
-    if(tipoRecorrido == "Preorden"){
-        arbol->agregarPreOrden(filaInfo);
-    }else if(tipoRecorrido == "Inorden"){
-        
-    }else if(tipoRecorrido == "Postorden"){
-
+    if (tipoRecorrido == "Preorden") {
+        raiz = arbol.agregarPreOrden(filaInfo); // Llamamos a agregarPreOrden en el objeto Arbol
+    } else if (tipoRecorrido == "Inorden") {
+        // Implementa la construcción del árbol en Inorden
+    } else if (tipoRecorrido == "Postorden") {
+        // Implementa la construcción del árbol en Postorden
     }
 
-    return arbol;
+    return raiz; // Devuelve la raíz del árbol
 }
 
+int main() {
+    system("cls");
 
-int main(){
-    Arbol <string> *arbol = obtenerArbol(obtenerFilaInfo());
+    string nombreArchivo = "infoArbol.txt";
+    cout << "Ingresa el nombre del archivo: ";
+    //cin >> nombreArchivo;
+
+    Fila<string> filaInfo = obtenerFilaInfo(nombreArchivo);
+    Nodo<string> *raiz = obtenerArbol(filaInfo);
+
+    if (raiz) {
+        cout << "\n\nRecorriendo el arbol en Preorden..." << endl;
+        Arbol<string> arbol(raiz); // Creamos el objeto Arbol con la raíz
+        arbol.recorridoPreOrden(raiz); // Llamamos a recorridoPreOrden en el objeto Arbol
+
+        bool continuar = true;
+
+        while (continuar) {
+            cout << "\nClasificar una entrada (S/N): ";
+            char respuesta;
+            cin >> respuesta;
+
+            if (respuesta == 'N' || respuesta == 'n') {
+                cout << "Saliendo..." << endl;
+                continuar = false; // Cambia la variable continuar para salir del bucle
+            } else if (respuesta == 'S' || respuesta == 's') {
+                arbol.clasificar();
+            }
+        }
+    }
 
     return 0;
 }

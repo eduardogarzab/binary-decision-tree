@@ -8,11 +8,12 @@ template <class T>
 class Arbol{
     public:
     Arbol();
+    Arbol(Nodo<T> *raiz);
     bool agregarNodo(T info);
     bool borrarNodo(T info);
     void recorridoPostOrden(Nodo<T> *nodo);
     void recorridoPreOrden(Nodo<T> *nodo);
-    bool agregarPreOrden(Fila<string> filaInfo);
+    Nodo<T> *agregarPreOrden(Fila<T> &filaInfo);
     void recorridoInOrden(Nodo<T> *nodo);
     void recorridoPorNiveles(Nodo<T> *nodo);
     bool esHoja(Nodo<T> *nodo);
@@ -21,6 +22,7 @@ class Arbol{
     Nodo<T> *padre(T info);
     void visitaNodo(Nodo<T> *nodo);
     Nodo<T> *getRaiz();
+    void clasificar();
 
     private:
     Nodo<T> *raiz;
@@ -29,6 +31,11 @@ class Arbol{
 template <class T>
 Arbol<T>::Arbol() {
     raiz = nullptr;
+}
+
+template <class T>
+Arbol<T>::Arbol(Nodo<T> *raiz) {
+    this->raiz = raiz;
 }
 
 template <class T>
@@ -143,18 +150,31 @@ void Arbol<T>::recorridoPreOrden(Nodo<T> *nodo) {
     if(nodo == nullptr) {
         return;
     }
-    visitaNodo(nodo);
-    if (nodo->getIzquierda() != nullptr){
-        recorridoPreOrden(nodo->getIzquierda());
-    }
-    if (nodo->getDerecha() != nullptr) {
-        recorridoPreOrden(nodo->getDerecha());
-    }
+    
+    visitaNodo(nodo);  // Imprime el nodo actual
+    recorridoPreOrden(nodo->getIzquierda());  // Recorre el subárbol izquierdo
+    recorridoPreOrden(nodo->getDerecha());    // Recorre el subárbol derecho
 }
 
-template<typename T>
-bool Arbol<T>::agregarPreOrden(Fila<string> filaInfo) {
-    return true;
+template <class T>
+Nodo<T> *Arbol<T>::agregarPreOrden(Fila<T> &filaInfo) {
+    if (filaInfo.estaVacia()) {
+        return nullptr;
+    }
+
+    T info = filaInfo.siguiente();
+    filaInfo.saca();
+
+    if (info == "Nulo") {
+        return nullptr; // Nodo nulo
+    }
+
+    Nodo<T> *nuevoNodo = new Nodo<T>(info);
+
+    nuevoNodo->setIzquierda(agregarPreOrden(filaInfo)); // Recursión para el hijo izquierdo
+    nuevoNodo->setDerecha(agregarPreOrden(filaInfo)); // Recursión para el hijo derecho
+
+    return nuevoNodo;
 }
 
 template<typename T>
@@ -260,6 +280,31 @@ void Arbol<T>::visitaNodo(Nodo<T> *nodo){
 }
 
 template <class T>
-Nodo<T> *Arbol<T>::getRaiz() {
+Nodo<T> *Arbol<T>::getRaiz(){
     return raiz;
+}
+
+template <class T>
+void Arbol<T>::clasificar(){
+    Nodo<T> *nodo = raiz;
+    bool clasificado = false;
+
+    while (nodo && !clasificado) {
+        cout << nodo->getInfo() << "? (S/N): ";
+        char respuesta;
+        cin >> respuesta;
+
+        if (respuesta == 'N' || respuesta == 'n') {
+            nodo = nodo->getDerecha();
+        } else if (respuesta == 'S' || respuesta == 's') {
+            nodo = nodo->getIzquierda();
+        } else {
+            cout << "Respuesta no válida. Introduce S para Sí o N para No." << endl;
+        }
+
+        if (esHoja(nodo)) {
+            cout << "Clasificacion: " << nodo->getInfo() << endl;
+            clasificado = true;
+        }
+    }
 }
