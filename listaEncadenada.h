@@ -19,8 +19,9 @@ public:
     void borrarElementoFinal();
     void desplegar();
     T traerDatosInicio();
+    T traerDatosFinal();
+    T traerDato(int indice);
     bool buscarElemento(T info);
-    
 
 private:       
     NodoLista<T> *inicio, *final;        // ptr a objeto inicial de la lista
@@ -202,6 +203,15 @@ T ListaEncadenada<T>::traerDatosInicio()
 }
 
 template <typename T>
+T ListaEncadenada<T>::traerDatosFinal()
+{
+    if(final != nullptr)
+        return (final->informacion);
+    else
+        return (T) NULL;
+}
+
+template <typename T>
 bool ListaEncadenada<T>::buscarElemento(T info)
 {
     NodoLista<T>* auxiliar = inicio;
@@ -216,3 +226,20 @@ bool ListaEncadenada<T>::buscarElemento(T info)
     return bandera;
 }
 
+template <typename T>
+T ListaEncadenada<T>::traerDato(int indice)
+{
+    NodoLista<T>* auxiliar = inicio;
+    int indiceAuxiliar = 1;
+
+    while ( (auxiliar != nullptr) and (indiceAuxiliar != indice))
+    {   
+        indiceAuxiliar = indiceAuxiliar + 1;
+        auxiliar = auxiliar ->siguiente;
+    };
+
+    if (auxiliar == nullptr)
+        return (T) NULL;
+    else
+        return (auxiliar->informacion);
+}

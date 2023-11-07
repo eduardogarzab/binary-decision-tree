@@ -1,5 +1,5 @@
 #include <iostream>
-#include "fila.h"
+#include "listaEncadenada.h"
 #include "nodo.h"
 
 using namespace std;
@@ -12,9 +12,11 @@ class Arbol{
     bool agregarNodo(T info);
     bool borrarNodo(T info);
     void recorridoPostOrden(Nodo<T> *nodo);
+    Nodo<T> *agregarPostOrden(ListaEncadenada<T> &listaInfo);
     void recorridoPreOrden(Nodo<T> *nodo);
-    Nodo<T> *agregarPreOrden(Fila<T> &filaInfo);
+    Nodo<T> *agregarPreOrden(ListaEncadenada<T> &listaInfo);
     void recorridoInOrden(Nodo<T> *nodo);
+    Nodo<T> *agregarInOrden(ListaEncadenada<T> &listaInfo);
     void recorridoPorNiveles(Nodo<T> *nodo);
     bool esHoja(Nodo<T> *nodo);
     Nodo<T> *predecesor(Nodo<T> *nodo);
@@ -136,13 +138,32 @@ void Arbol<T>::recorridoPostOrden(Nodo<T> *nodo) {
     if(nodo == nullptr) {
         return;
     }
-    if (nodo->getIzquierda() != nullptr){
-        recorridoPostOrden(nodo->getIzquierda());
+    
+    recorridoPostOrden(nodo->getIzquierda());  // Recorre el subárbol izquierdo
+    recorridoPostOrden(nodo->getDerecha());    // Recorre el subárbol derecho
+    visitaNodo(nodo);  // Imprime el nodo actual
+}
+
+template <class T>
+Nodo<T> *Arbol<T>::agregarPostOrden(ListaEncadenada<T> &listaInfo) {
+    //Agregar la informacion siguiendo el recorrido postorden
+    //Como la raiz es el ultimo elemento, se debe sacar primero
+
+    if (listaInfo.estaVacia()) {
+        return nullptr;
     }
-    if (nodo->getDerecha() != nullptr) {
-        recorridoPostOrden(nodo->getDerecha());
+
+    T info = listaInfo.traerDatosFinal();
+    listaInfo.borrarElementoFinal();
+
+    if (info == "Nulo") {
+        return nullptr; // Nodo nulo
     }
-    visitaNodo(nodo);
+
+    Nodo<T> *nuevoNodo = new Nodo<T>(info);
+
+    nuevoNodo->setDerecha(agregarPostOrden(listaInfo)); // Recursión para el hijo derecho
+    nuevoNodo->setIzquierda(agregarPostOrden(listaInfo)); // Recursión para el hijo izquierdo
 }
 
 template<typename T>
@@ -157,13 +178,13 @@ void Arbol<T>::recorridoPreOrden(Nodo<T> *nodo) {
 }
 
 template <class T>
-Nodo<T> *Arbol<T>::agregarPreOrden(Fila<T> &filaInfo) {
-    if (filaInfo.estaVacia()) {
+Nodo<T> *Arbol<T>::agregarPreOrden(ListaEncadenada<T> &listaInfo) {
+    if (listaInfo.estaVacia()) {
         return nullptr;
     }
 
-    T info = filaInfo.siguiente();
-    filaInfo.saca();
+    T info = listaInfo.traerDatosInicio();
+    listaInfo.borrarElementoInicio();
 
     if (info == "Nulo") {
         return nullptr; // Nodo nulo
@@ -171,8 +192,8 @@ Nodo<T> *Arbol<T>::agregarPreOrden(Fila<T> &filaInfo) {
 
     Nodo<T> *nuevoNodo = new Nodo<T>(info);
 
-    nuevoNodo->setIzquierda(agregarPreOrden(filaInfo)); // Recursión para el hijo izquierdo
-    nuevoNodo->setDerecha(agregarPreOrden(filaInfo)); // Recursión para el hijo derecho
+    nuevoNodo->setIzquierda(agregarPreOrden(listaInfo)); // Recursión para el hijo izquierdo
+    nuevoNodo->setDerecha(agregarPreOrden(listaInfo)); // Recursión para el hijo derecho
 
     return nuevoNodo;
 }
@@ -182,12 +203,25 @@ void Arbol<T>::recorridoInOrden(Nodo<T> *nodo) {
     if(nodo == nullptr) {
         return;
     }
-    if (nodo->getIzquierda() != nullptr){
-        recorridoInOrden(nodo->getIzquierda());
+    
+    recorridoInOrden(nodo->getIzquierda());  // Recorre el subárbol izquierdo
+    visitaNodo(nodo);  // Imprime el nodo actual
+    recorridoInOrden(nodo->getDerecha());    // Recorre el subárbol derecho
+}
+
+template <class T>
+Nodo<T> *Arbol<T>::agregarInOrden(ListaEncadenada<T> &listaInfo) {
+    //Agregar la informacion siguiendo el recorrido inorden
+    //Como la raiz es el elemento del medio, se debe sacar primero y se debe obtener el tamaño de la lista y verificar que sea impar
+    //Siempre se debera tomar el arbol como si estuviese correctamente balanceado
+
+    if (listaInfo.estaVacia()) {
+        return nullptr;
     }
-    visitaNodo(nodo);
-    if (nodo->getDerecha() != nullptr) {
-        recorridoInOrden(nodo->getDerecha());
+
+    int tamano = listaInfo.tamanio();
+    if (tamano % 2 == 0) {
+        return nullptr; // El árbol no está balanceado
     }
 }
 
