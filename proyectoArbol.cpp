@@ -75,67 +75,73 @@ ListaEncadenada<string> obtenerlistaInfo(const string &nombreArchivo) {
     return lista;
 }
 
-Nodo<string> *obtenerArbol(ListaEncadenada<string> listaInfo, string &tipoRecorrido) {
+Arbol<string> obtenerArbol(ListaEncadenada<string> listaInfo, string &tipoRecorrido) {
     tipoRecorrido = listaInfo.traerDatosInicio();
     listaInfo.borrarElementoInicio(); // Obtiene el tipo de recorrido y lo saca
 
-    Nodo<string> *raiz = nullptr; // Inicializa la raíz como nullptr
-    Arbol<string> arbol; // Creamos un Arbol de tipo string
+    Arbol<string> arbol;
 
     if (tipoRecorrido == "Preorden") {
-        raiz = arbol.agregarPreOrden(listaInfo);
-        cout << "\nRecorrido en Preorden\n" << endl;
-        arbol.recorridoPreOrden(raiz);
-    } else if (tipoRecorrido == "Inorden") {
-        raiz = arbol.agregarInOrden(listaInfo);
-        if (raiz) {
-            cout << "\nRecorrido en Inorden\n" << endl;
-            arbol.recorridoInOrden(raiz);
+        arbol.agregarPreOrden(listaInfo);
+
+        if (arbol.getRaiz()) {
+            cout << "\nRecorrido en Preorden\n" << endl;
+            arbol.recorridoPreOrden(arbol.getRaiz());
         }
+
+    } else if (tipoRecorrido == "Inorden") {
+
     } else if (tipoRecorrido == "Postorden") {
-        raiz = arbol.agregarPostOrden(listaInfo);
-        cout << "\nRecorrido en Postorden\n" << endl;
-        arbol.recorridoPostOrden(raiz);
+        arbol.agregarPostOrden(listaInfo);
+
+        if (arbol.getRaiz()) {
+            cout << "\nRecorrido en Postorden\n" << endl;
+            arbol.recorridoPostOrden(arbol.getRaiz());
+        }
+
+    } else {
+        cout << "No se identifico el recorrido" << endl;
     }
 
-    return raiz;
+    return arbol;
 }
 
-void clasificaInfo(Nodo<string> *raiz) {
-    if (raiz) {
-        Arbol<string> arbol(raiz); // Creamos el Arbol con la raíz
+void clasificaInfo(Arbol<string> arbol) {
+    Nodo<string> *raiz = arbol.getRaiz();
 
+    if (raiz) {
         bool continuar = true;
 
         while (continuar) {
-            cout << "\nClasificar una entrada (S/N): ";
+            cout << "\nQuieres clasificar (S/N)? ";
             char respuesta;
             cin >> respuesta;
+            cout << endl;
 
             if (respuesta == 'N' || respuesta == 'n') {
-                cout << "\nSaliendo del programa" << endl;
+                cout << "Saliendo del programa..." << endl;
                 continuar = false; // Cambia la variable continuar para salir del bucle
             } else if (respuesta == 'S' || respuesta == 's') {
                 arbol.clasificar();
             }
         }
     } else {
-        cout << "No se pudo crear el arbol" << endl;
+        cout << "\nNo se pudo crear el arbol correctamente" << endl;
     }
 }
 
 int main() {
     system("cls");
 
-    string nombreArchivo = "infoArbol.txt";
+    string nombreArchivo;
     string tipoRecorrido;
     cout << "Ingresa el nombre del archivo: ";
-    //cin >> nombreArchivo;
+    cin >> nombreArchivo;
 
     ListaEncadenada<string> listaInfo = obtenerlistaInfo(nombreArchivo);
-    Nodo<string> *raiz = obtenerArbol(listaInfo, tipoRecorrido);
+    Arbol<string> arbol = obtenerArbol(listaInfo, tipoRecorrido);
 
-    clasificaInfo(raiz);
+    clasificaInfo(arbol);
 
     return 0;
 }

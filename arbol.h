@@ -8,7 +8,6 @@ template <class T>
 class Arbol{
     public:
     Arbol();
-    Arbol(Nodo<T> *raiz);
     bool agregarNodo(T info);
     bool borrarNodo(T info);
     void recorridoPostOrden(Nodo<T> *nodo);
@@ -35,11 +34,6 @@ Arbol<T>::Arbol() {
     raiz = nullptr;
 }
 
-template <class T>
-Arbol<T>::Arbol(Nodo<T> *raiz) {
-    this->raiz = raiz;
-}
-
 template <typename T>
 bool Arbol<T>::agregarNodo(T info){
     Nodo<T>* nuevoNodo;
@@ -60,28 +54,28 @@ bool Arbol<T>::agregarNodo(T info){
         }else{
             auxiliar = raiz;
             while(!esHoja(auxiliar)){
-                if(nuevoNodo->setInfo() < auxiliar->setInfo()){
+                if(nuevoNodo->getInfo() < auxiliar->getInfo()){
                     hijo = auxiliar->getIzquierda();
                     if(hijo == nullptr){
                         auxiliar->setIzquierda(nuevoNodo);
                     }
-                }else if(nuevoNodo->setInfo() > auxiliar->setInfo()){
+                }else if(nuevoNodo->getInfo() > auxiliar->getInfo()){
                     hijo = auxiliar->getDerecha();
                     if(hijo == nullptr){
                         auxiliar->setDerecha(nuevoNodo);
                     }
                 }else{
-                    return false;
+                    bandera = false;
                 }
                 auxiliar = hijo;
             }
             if(auxiliar != nullptr){
-                if(nuevoNodo->setInfo() < auxiliar->setInfo())
+                if(nuevoNodo->getInfo() < auxiliar->getInfo())
                     auxiliar->setIzquierda(nuevoNodo);
-                else if(nuevoNodo->setInfo() > auxiliar->setInfo())
+                else if(nuevoNodo->getInfo() > auxiliar->getInfo())
                     auxiliar->setDerecha(nuevoNodo);
                 else
-                    return false;
+                    bandera = false;
             }
         }
     }
@@ -180,7 +174,7 @@ void Arbol<T>::recorridoPostOrden(Nodo<T> *nodo) {
 template <class T>
 Nodo<T> *Arbol<T>::agregarPostOrden(ListaEncadenada<T> &listaInfo) {
     //Agregar la informacion siguiendo el recorrido postorden
-    //Como la raiz es el ultimo elemento, se debe sacar primero
+    //Como la raiz es el ultimo elemento, se debe sacar primero obteniendola del final
 
     if (listaInfo.estaVacia()) {
         return nullptr;
@@ -195,8 +189,14 @@ Nodo<T> *Arbol<T>::agregarPostOrden(ListaEncadenada<T> &listaInfo) {
 
     Nodo<T> *nuevoNodo = new Nodo<T>(info);
 
+    if (raiz == nullptr) {
+        raiz = nuevoNodo;
+    }
+
     nuevoNodo->setDerecha(agregarPostOrden(listaInfo)); // Recursión para el hijo derecho
     nuevoNodo->setIzquierda(agregarPostOrden(listaInfo)); // Recursión para el hijo izquierdo
+
+    return nuevoNodo;
 }
 
 template<typename T>
@@ -212,6 +212,9 @@ void Arbol<T>::recorridoPreOrden(Nodo<T> *nodo) {
 
 template <class T>
 Nodo<T> *Arbol<T>::agregarPreOrden(ListaEncadenada<T> &listaInfo) {
+    //Agregar la informacion siguiendo el recorrido preorden
+    //Como la raiz es el primer elemento, se debe sacar primero del inicio
+
     if (listaInfo.estaVacia()) {
         return nullptr;
     }
@@ -224,6 +227,10 @@ Nodo<T> *Arbol<T>::agregarPreOrden(ListaEncadenada<T> &listaInfo) {
     }
 
     Nodo<T> *nuevoNodo = new Nodo<T>(info);
+
+    if (raiz == nullptr) {
+        raiz = nuevoNodo;
+    }
 
     nuevoNodo->setIzquierda(agregarPreOrden(listaInfo)); // Recursión para el hijo izquierdo
     nuevoNodo->setDerecha(agregarPreOrden(listaInfo)); // Recursión para el hijo derecho
