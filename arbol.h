@@ -40,97 +40,130 @@ Arbol<T>::Arbol(Nodo<T> *raiz) {
     this->raiz = raiz;
 }
 
-template <class T>
-bool Arbol<T>::agregarNodo(T info) {
-    Nodo<T> *nuevo = new Nodo<T>(info);
-    if (nuevo == nullptr) {
-        return false;
+template <typename T>
+bool Arbol<T>::agregarNodo(T info){
+    Nodo<T>* nuevoNodo;
+    bool bandera;
+    Nodo<T>* auxiliar;
+    Nodo<T>* hijo;
+    nuevoNodo = new Nodo<T>(info);
+
+    if(nuevoNodo == nullptr){
+        bandera = false;
+    }else{
+        bandera = true;
     }
 
-    if (raiz == nullptr) {
-        raiz = nuevo;
-        return true;
-    }
-
-    Nodo<T> *auxiliar = raiz;
-    while (auxiliar != nullptr) {
-        if (info < auxiliar->getInfo()) {
-            if (auxiliar->getIzquierda() == nullptr) {
-                auxiliar->setIzquierda(nuevo);
-                return true;
-            } else {
-                auxiliar = auxiliar->getIzquierda();
+    if(bandera){
+        if(raiz == nullptr){
+            raiz = nuevoNodo;
+        }else{
+            auxiliar = raiz;
+            while(!esHoja(auxiliar)){
+                if(nuevoNodo->setInfo() < auxiliar->setInfo()){
+                    hijo = auxiliar->getIzquierda();
+                    if(hijo == nullptr){
+                        auxiliar->setIzquierda(nuevoNodo);
+                    }
+                }else if(nuevoNodo->setInfo() > auxiliar->setInfo()){
+                    hijo = auxiliar->getDerecha();
+                    if(hijo == nullptr){
+                        auxiliar->setDerecha(nuevoNodo);
+                    }
+                }else{
+                    return false;
+                }
+                auxiliar = hijo;
             }
-        } else {
-            if (auxiliar->getDerecha() == nullptr) {
-                auxiliar->setDerecha(nuevo);
-                return true;
-            } else {
-                auxiliar = auxiliar->getDerecha();
+            if(auxiliar != nullptr){
+                if(nuevoNodo->setInfo() < auxiliar->setInfo())
+                    auxiliar->setIzquierda(nuevoNodo);
+                else if(nuevoNodo->setInfo() > auxiliar->setInfo())
+                    auxiliar->setDerecha(nuevoNodo);
+                else
+                    return false;
             }
         }
     }
-    return false;
+    return bandera;
 }
 
-template <class T>
-bool Arbol<T>::borrarNodo(T info) {
-    Nodo<T>* auxiliar = raiz;
-    Nodo<T>* nodoPadre = nullptr;
-    Nodo<T>* nodoPredecesor = nullptr;
+template <typename T>
+bool Arbol<T>::borrarNodo(T info){
+    Nodo<T>* auxiliar;
+    bool bandera;
+    Nodo<T>* padre;
+    Nodo<T>* hijoIzquierdo;
+    Nodo<T>* hijoDerecho;
+    Nodo<T>* predecesor;
     T infoPredecesor;
+    int cantidadHijos;
     
-    if (auxiliar == nullptr) {
-        return false; // El árbol está vacío, no se puede borrar
-    }
-    
-    // Buscar el nodo a borrar y su padre
-    while (auxiliar != nullptr && auxiliar->getInfo() != info) {
-        nodoPadre = auxiliar;
-        if (info < auxiliar->getInfo()) {
-            auxiliar = auxiliar->getIzquierda();
-        } else {
-            auxiliar = auxiliar->getDerecha();
+    auxiliar = raiz;
+
+    if(auxiliar == nullptr){
+        bandera = false;
+    }else{
+        while(auxiliar != nullptr && auxiliar->getInfo() != info){
+            if(info < auxiliar->getInfo())
+                auxiliar = auxiliar->getIzquierda();
+            else 
+                auxiliar = auxiliar->getDerecha();
+        }
+        if(auxiliar == nullptr){
+            bandera = false;
+        }else{
+            hijoIzquierdo = auxiliar->getIzquierda();
+            hijoDerecho = auxiliar->getDerecha();
+            cantidadHijos = auxiliar->cantidadHijos();
+            
+            if(cantidadHijos == 0){
+                padre = this->padre(info);
+                if(padre == nullptr){
+                    delete raiz;
+                    raiz = nullptr;
+                }
+                else{
+                    if(auxiliar->getInfo() < padre->getInfo())
+                        padre->setIzquierda(nullptr);
+                    else
+                        padre->setDerecha(nullptr);
+                    delete auxiliar;
+                }
+            }
+            else if(cantidadHijos == 1){
+                padre = this->padre(info);
+                if(padre == nullptr){
+                    delete raiz;
+                    if(hijoIzquierdo == nullptr)
+                        raiz = hijoDerecho;
+                    else
+                        raiz = hijoIzquierdo;
+                }else{
+                    if(info < padre->getInfo()){
+                        if(hijoIzquierdo == nullptr)
+                            padre->setIzquierda(hijoDerecho);
+                        else
+                            padre->setIzquierda(hijoIzquierdo);
+                    }
+                    else
+                    {
+                        if(hijoIzquierdo == nullptr)
+                            padre->setDerecha(hijoDerecho);
+                        else
+                            padre->setDerecha(hijoIzquierdo);
+                    }
+                    delete auxiliar;
+                }
+            }else if(cantidadHijos == 2){
+                predecesor = this->predecesor(auxiliar);
+                infoPredecesor = predecesor->getInfo();
+                borrarNodo(infoPredecesor);
+                auxiliar->setInfo(infoPredecesor);
+            }
         }
     }
-
-    if (auxiliar == nullptr) {
-        return false; // No se encontró el nodo a borrar
-    }
-
-    int cantidadHijos = auxiliar->cantidadHijos();
-
-    if (cantidadHijos == 0) {
-        if (nodoPadre == nullptr) {
-            delete raiz;
-            raiz = nullptr;
-        } else if (auxiliar == nodoPadre->getIzquierda()) {
-            delete auxiliar;
-            nodoPadre->setIzquierda(nullptr);
-        } else {
-            delete auxiliar;
-            nodoPadre->setDerecha(nullptr);
-        }
-    } else if (cantidadHijos == 1) {
-        Nodo<T>* hijo = (auxiliar->getIzquierda() != nullptr) ? auxiliar->getIzquierda() : auxiliar->getDerecha();
-        if (nodoPadre == nullptr) {
-            delete raiz;
-            raiz = hijo;
-        } else if (auxiliar == nodoPadre->getIzquierda()) {
-            delete auxiliar;
-            nodoPadre->setIzquierda(hijo);
-        } else {
-            delete auxiliar;
-            nodoPadre->setDerecha(hijo);
-        }
-    } else {
-        nodoPredecesor = predecesor(auxiliar);
-        infoPredecesor = nodoPredecesor->getInfo();
-        borrarNodo(infoPredecesor);
-        auxiliar->setInfo(infoPredecesor);
-    }
-
-    return true; // Borrado exitoso
+    return bandera;
 }
 
 template <typename T>
@@ -221,6 +254,7 @@ Nodo<T> *Arbol<T>::agregarInOrden(ListaEncadenada<T> &listaInfo) {
 
     int tamano = listaInfo.tamanio();
     if (tamano % 2 == 0) {
+        cout << "El arbol no esta balanceado" << endl;
         return nullptr; // El árbol no está balanceado
     }
 }

@@ -80,7 +80,7 @@ Nodo<string> *obtenerArbol(ListaEncadenada<string> listaInfo, string &tipoRecorr
     listaInfo.borrarElementoInicio(); // Obtiene el tipo de recorrido y lo saca
 
     Nodo<string> *raiz = nullptr; // Inicializa la raíz como nullptr
-    Arbol<string> arbol; // Creamos un objeto Arbol
+    Arbol<string> arbol; // Creamos un Arbol de tipo string
 
     if (tipoRecorrido == "Preorden") {
         raiz = arbol.agregarPreOrden(listaInfo);
@@ -88,9 +88,7 @@ Nodo<string> *obtenerArbol(ListaEncadenada<string> listaInfo, string &tipoRecorr
         arbol.recorridoPreOrden(raiz);
     } else if (tipoRecorrido == "Inorden") {
         raiz = arbol.agregarInOrden(listaInfo);
-        if(raiz == nullptr) {
-            cout << "El arbol no esta balanceado" << endl;
-        } else {
+        if (raiz) {
             cout << "\nRecorrido en Inorden\n" << endl;
             arbol.recorridoInOrden(raiz);
         }
@@ -105,7 +103,7 @@ Nodo<string> *obtenerArbol(ListaEncadenada<string> listaInfo, string &tipoRecorr
 
 void clasificaInfo(Nodo<string> *raiz) {
     if (raiz) {
-        Arbol<string> arbol(raiz); // Creamos el objeto Arbol con la raíz
+        Arbol<string> arbol(raiz); // Creamos el Arbol con la raíz
 
         bool continuar = true;
 
@@ -115,7 +113,7 @@ void clasificaInfo(Nodo<string> *raiz) {
             cin >> respuesta;
 
             if (respuesta == 'N' || respuesta == 'n') {
-                cout << "Saliendo..." << endl;
+                cout << "\nSaliendo del programa" << endl;
                 continuar = false; // Cambia la variable continuar para salir del bucle
             } else if (respuesta == 'S' || respuesta == 's') {
                 arbol.clasificar();
@@ -132,7 +130,7 @@ int main() {
     string nombreArchivo = "infoArbol.txt";
     string tipoRecorrido;
     cout << "Ingresa el nombre del archivo: ";
-    cin >> nombreArchivo;
+    //cin >> nombreArchivo;
 
     ListaEncadenada<string> listaInfo = obtenerlistaInfo(nombreArchivo);
     Nodo<string> *raiz = obtenerArbol(listaInfo, tipoRecorrido);
