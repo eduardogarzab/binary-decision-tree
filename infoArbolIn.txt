@@ -1,0 +1,20 @@
+Inorden
+Nulo
+Fruta Manzana
+Nulo
+Tamanio grande
+Nulo
+Fruta Cereza
+Nulo
+Color rojo
+Nulo
+Fruta Pera
+Nulo
+Tamanio Grande
+Nulo
+Fruta Limon
+Nulo
+Color amarillo
+Nulo
+Sin respuesta
+Nulo

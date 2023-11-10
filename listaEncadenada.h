@@ -17,6 +17,7 @@ public:
     int encontrarPosicionElemento(T info);
     void borrarElementoInicio();
     void borrarElementoFinal();
+    bool borrarElemento(int posicion);
     void desplegar();
     T traerDatosInicio();
     T traerDatosFinal();
@@ -242,4 +243,40 @@ T ListaEncadenada<T>::traerDato(int indice)
         return (T) NULL;
     else
         return (auxiliar->informacion);
+}
+
+template <typename T>
+bool ListaEncadenada<T>::borrarElemento(int posicion)
+{
+    NodoLista<T>* auxiliar = inicio;
+    NodoLista<T>* auxiliar2;
+    bool bandera = false;
+    int indice = 1;
+
+    if (inicio != nullptr)
+    {
+        if (posicion == 1)
+        {
+            borrarElementoInicio();
+            bandera = true;
+        }
+        else
+        {
+            while ( (auxiliar != nullptr) and (indice < posicion-1))
+            {   
+                indice = indice + 1;
+                auxiliar = auxiliar ->siguiente;
+            };
+
+            if (auxiliar != nullptr)
+            {
+                auxiliar2 = auxiliar->siguiente;
+                auxiliar->siguiente = auxiliar2->siguiente;
+                delete auxiliar2;
+                bandera = true;
+            }
+        }
+    }
+
+    return bandera;
 }

@@ -15,7 +15,7 @@ class Arbol{
     void recorridoPreOrden(Nodo<T> *nodo);
     Nodo<T> *agregarPreOrden(ListaEncadenada<T> &listaInfo);
     void recorridoInOrden(Nodo<T> *nodo);
-    Nodo<T> *agregarInOrden(ListaEncadenada<T> &listaInfo);
+    Nodo<T> *agregarInOrden(ListaEncadenada<T> &listaInfo, int tamanio);
     void recorridoPorNiveles(Nodo<T> *nodo);
     bool esHoja(Nodo<T> *nodo);
     Nodo<T> *predecesor(Nodo<T> *nodo);
@@ -250,20 +250,12 @@ void Arbol<T>::recorridoInOrden(Nodo<T> *nodo) {
 }
 
 template <class T>
-Nodo<T> *Arbol<T>::agregarInOrden(ListaEncadenada<T> &listaInfo) {
+Nodo<T> *Arbol<T>::agregarInOrden(ListaEncadenada<T> &listaInfo, int tamanio) {
     //Agregar la informacion siguiendo el recorrido inorden
     //Como la raiz es el elemento del medio, se debe sacar primero y se debe obtener el tamaño de la lista y verificar que sea impar
     //Siempre se debera tomar el arbol como si estuviese correctamente balanceado
+    //Recursivamente una vez que tengamos la raiz debemos separar la lista en dos mitades izq y der y seguir el mismo proceso de mitad hasta que queden 3 en la lista
 
-    if (listaInfo.estaVacia()) {
-        return nullptr;
-    }
-
-    int tamano = listaInfo.tamanio();
-    if (tamano % 2 == 0) {
-        cout << "El arbol no esta balanceado" << endl;
-        return nullptr; // El árbol no está balanceado
-    }
 }
 
 template<typename T>
