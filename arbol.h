@@ -174,7 +174,7 @@ void Arbol<T>::recorridoPostOrden(Nodo<T> *nodo) {
 template <class T>
 Nodo<T> *Arbol<T>::agregarPostOrden(ListaEncadenada<T> &listaInfo) {
     //Agregar la informacion siguiendo el recorrido postorden
-    //Como la raiz es el ultimo elemento, se debe sacar primero obteniendola del final
+    //Como la raiz es el ultimo elemento, se debe sacar primero obteniendola del final de la lista
 
     if (listaInfo.estaVacia()) {
         return nullptr;
@@ -251,16 +251,12 @@ void Arbol<T>::recorridoInOrden(Nodo<T> *nodo) {
 
 template <class T>
 Nodo<T> *Arbol<T>::agregarInOrden(ListaEncadenada<T> &listaInfo, int tamanio) {
-    //Agregar la informacion siguiendo el recorrido inorden
-    //Como la raiz es el elemento del medio, se debe sacar primero y se debe obtener el tamaño de la lista y verificar que sea impar
-    //Siempre se debera tomar el arbol como si estuviese correctamente balanceado
-    //Recursivamente una vez que tengamos la raiz debemos separar la lista en dos mitades izq y der y seguir el mismo proceso de mitad hasta que queden 3 en la lista
-
+    //No se puede
 }
 
 template<typename T>
 void Arbol<T>::recorridoPorNiveles(Nodo<T> *nodo){
-    cout << "Recorrido por niveles" << endl;
+    //Agregar la informacion siguiendo el recorrido por niveles
 }
 
 template <typename T>
@@ -356,7 +352,7 @@ void Arbol<T>::clasificar(){
     Nodo<T> *nodo = raiz;
     bool clasificado = false;
 
-    while (nodo && !clasificado) {
+    while (nodo && !clasificado) { //Mientras el nodo exista y no se haya clasificado
         cout << nodo->getInfo() << "? (S/N): ";
         char respuesta;
         cin >> respuesta;
@@ -365,8 +361,6 @@ void Arbol<T>::clasificar(){
             nodo = nodo->getDerecha();
         } else if (respuesta == 'S' || respuesta == 's') {
             nodo = nodo->getIzquierda();
-        } else {
-            cout << "Respuesta no válida. Introduce S para Sí o N para No." << endl;
         }
 
         if (esHoja(nodo)) {

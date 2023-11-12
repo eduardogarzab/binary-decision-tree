@@ -1,0 +1,40 @@
+Postorden
+Nulo
+Nulo
+Fruta/Manzana
+Nulo
+Nulo
+Fruta/Cereza
+Tamanio/grande
+Nulo
+Nulo
+Fruta/Pera
+Nulo
+Nulo
+Fruta/Limon
+Tamanio/grande
+Nulo
+Nulo
+Sin respuesta
+Color amarillo
+Color rojo
+Nulo
+Nulo
+Verdura/Pepino
+Nulo
+Nulo
+Verdura/Brocoli
+Tamanio/grande
+Nulo
+Nulo
+Verdura/Maiz
+Nulo
+Nulo
+Verdura/Tomate
+Color amarillo
+Color verde
+Nulo
+Nulo
+Sin respuesta
+Verdura
+Fruta

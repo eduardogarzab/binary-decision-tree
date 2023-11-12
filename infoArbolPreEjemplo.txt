@@ -1,0 +1,40 @@
+Preorden
+Fruta
+Color rojo
+Tamanio/grande
+Fruta/Manzana
+Nulo
+Nulo
+Fruta/Cereza
+Nulo
+Nulo
+Color amarillo
+Tamanio/grande
+Fruta/Pera
+Nulo
+Nulo
+Fruta/Limon
+Nulo
+Nulo
+Sin respuesta
+Nulo
+Nulo
+Verdura
+Color verde
+Tamanio/grande
+Verdura/Pepino
+Nulo
+Nulo
+Verdura/Brocoli
+Nulo
+Nulo
+Color amarillo
+Verdura/Maiz
+Nulo
+Nulo
+Verdura/Tomate
+Nulo
+Nulo
+Sin respuesta
+Nulo
+Nulo
